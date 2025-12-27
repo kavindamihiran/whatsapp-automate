@@ -1,120 +1,80 @@
 # WhatsApp Message Automation
 
-Automatically send WhatsApp messages to multiple Sri Lankan phone numbers.
+Automated bulk messaging tool for WhatsApp Web supporting Sri Lankan phone numbers.
 
 ## Features
 
 - Send messages to multiple numbers automatically
-- Supports Sri Lankan phone number formats
-- Read numbers from file or enter manually
-- Auto-formats phone numbers with +94 country code
-- Progress tracking and summary report
+- Auto-formats Sri Lankan numbers to international format (+94)
+- Read data from files or manual entry
+- Progress tracking and delivery summary
 
 ## Requirements
 
-- Python 3.7 or higher
-- WhatsApp installed on your phone
+- Python 3.7+
+- Active WhatsApp account
 - Internet connection
-- Chrome/Firefox browser
 
 ## Installation
-
-1. Install Python dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Make sure you're logged into WhatsApp Web in your default browser
+Ensure you're logged into [WhatsApp Web](https://web.whatsapp.com) before running.
 
 ## Usage
 
-### Method 1: Using a phone numbers file
-
-1. Add phone numbers to `numbers.txt` (one per line)
-2. Run the script:
-
 ```bash
 python whatsapp_automation.py
 ```
 
-3. Choose option 1 (from file)
-4. Enter your message
-5. Confirm to send
+**Options:**
 
-### Method 2: Manual entry
-
-1. Run the script:
-
-```bash
-python whatsapp_automation.py
-```
-
-2. Choose option 2 (manual entry)
-3. Enter phone numbers (one per line, press Enter twice when done)
-4. Enter your message
-5. Confirm to send
+- Load numbers from `numbers.txt` or enter manually
+- Load message from `message.txt` or type directly
+- Confirm and send
 
 ## Phone Number Formats
 
-The script automatically handles these formats:
-
-- `0771234567` (Sri Lankan format with leading 0)
-- `771234567` (without leading 0)
-- `+94771234567` (international format)
-- `94771234567` (international without +)
+Accepts: `0771234567`, `771234567`, `+94771234567`, `94771234567`  
+All converted to: `+94771234567`
 
 ## Important Notes
 
-⚠️ **Before running:**
-
-1. Make sure WhatsApp Web is logged in
-2. Close any open WhatsApp Web tabs
-3. Don't use your mouse/keyboard while messages are being sent
-4. The script will open WhatsApp Web automatically
-
-⚠️ **Limitations:**
-
-- WhatsApp may flag your account if you send too many messages quickly
-- Add delays between messages to avoid detection
-- Use responsibly and don't spam
-
-⚠️ **First message to new contacts:**
-
-- If the contact doesn't have you saved, they'll see your message in requests
-- It's best to send to contacts who already have your number
+- Don't use mouse/keyboard during sending
+- Max 20-30 messages per batch recommended
+- WhatsApp may flag excessive messaging
+- Recipients without your number saved will see messages in requests
+- Use responsibly and only with consent
 
 ## Troubleshooting
 
-**Issue: Messages not sending**
+**Messages not sending:** Increase wait times in code (lines 49, 58, 64)  
+**Phone errors:** Verify valid Sri Lankan mobile numbers (9 digits)  
+**Script crashes:** Check Python 3.7+, reinstall dependencies
 
-- Make sure WhatsApp Web is logged in
-- Check your internet connection
-- Verify phone numbers are correct
+## Example Files
 
-**Issue: Script closes browser too quickly**
-
-- Increase `wait_time` parameter in the code
-- Check if pyautogui is working correctly
-
-**Issue: Phone number format errors**
-
-- Make sure numbers are valid Sri Lankan numbers
-- Remove spaces and special characters
-
-## Example
+**numbers.txt:**
 
 ```
-numbers.txt:
 0771234567
 0772345678
 +94773456789
+```
 
-Message:
-Hello! This is an automated message.
-Thank you for your support!
+**message.txt:**
+
+```
+Hello! This is an automated reminder about our event on January 15, 2028.
+Please confirm your attendance.
 ```
 
 ## License
 
-Free to use for personal purposes. Use responsibly.
+Free for personal and educational use. Follow WhatsApp's Terms of Service.
+
+---
+
+**Disclaimer:** Use for legitimate communication only. Always obtain consent before messaging.
