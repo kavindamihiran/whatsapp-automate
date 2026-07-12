@@ -1,75 +1,101 @@
-# WhatsApp Message Automation
+# WhatsApp Bulk Sender — Local Automation
 
-Automated bulk messaging tool for WhatsApp Web supporting Sri Lankan phone numbers.
+A local WhatsApp Web automation tool built with Next.js, TypeScript, Puppeteer, and Tailwind CSS. Designed for Sri Lankan phone numbers and opted-in recipients.
+
+**Local use only** — the Send All button launches one controlled WhatsApp Web window, sends sequentially, and stores that login on your computer.
+
+---
 
 ## Features
 
-- Send messages to multiple numbers automatically
-- Auto-formats Sri Lankan numbers to international format (+94)
-- Read data from files or manual entry
-- Progress tracking and delivery summary
+- **📱 Sri Lankan number normalization** — auto-converts `0771234567`, `+94 77 123 4567`, etc. to `+94771234567`
+- **📄 Paste or upload** numbers from `.txt` / `.csv` files
+- **✏️ Simple message editor** for one message to all recipients
+- **✅ Live validation** — see which numbers are valid before sending
+- **🚀 Send to all** — sends sequentially through one WhatsApp Web window
+- **📊 Live progress** — shows sent and failed recipients and supports stopping a job
+- **💾 Save campaigns** — templates stored in your browser (localStorage)
+- **🌙 Dark mode** — follows system preference, toggleable
+- **📱 Fully responsive** — works on desktop and mobile
 
-## Requirements
+## How It Works
 
-- Python 3.7+
-- Active WhatsApp account
-- Internet connection
+1. Paste or upload your phone numbers
+2. Write your message
+3. Review validated numbers
+4. Confirm that recipients have given permission
+5. Click **Send all**
+6. Scan the QR code in the browser window on the first run
+7. Keep the localhost page open until the summary appears
 
-## Installation
+The WhatsApp login is saved under `.whatsapp-session/`, which is excluded from Git. Later runs reuse that login until WhatsApp signs it out.
+
+## Quick Start
 
 ```bash
-pip install -r requirements.txt
+npm install
+npm run dev
 ```
 
-Ensure you're logged into [WhatsApp Web](https://web.whatsapp.com) before running.
-
-## Usage
-
-```bash
-python whatsapp_automation.py
-```
-
-**Options:**
-
-- Load numbers from `numbers.txt` or enter manually
-- Load message from `message.txt` or type directly
-- Confirm and send
+Open [http://localhost:3000](http://localhost:3000) in your browser. The automation API rejects requests that are not made through localhost.
 
 ## Phone Number Formats
 
-Accepts: `0771234567`, `771234567`, `+94771234567`, `94771234567`  
-All converted to: `+94771234567`
+| Format | Example | Converted to |
+|--------|---------|-------------|
+| Local (short) | `0771234567` | `+94771234567` |
+| Without 0 | `771234567` | `+94771234567` |
+| International (plus) | `+94771234567` | `+94771234567` |
+| International (no plus) | `94771234567` | `+94771234567` |
+| With spaces/dashes | `077-123 4567` | `+94771234567` |
+
+Only Sri Lankan mobile numbers (9 digits, prefix `7x`) are accepted.
+
+## Project Structure
+
+```
+├── app/
+│   ├── globals.css          # Tailwind + custom styles
+│   ├── layout.tsx           # Root layout with dark mode script
+│   ├── api/automation/      # Local start, status, and stop endpoints
+│   └── page.tsx             # Main interface
+├── components/
+│   ├── BulkActions.tsx      # Send All controls and live progress
+│   ├── MessageEditor.tsx    # Message textarea
+│   ├── NumberList.tsx       # Validated numbers list with individual Send buttons
+│   ├── Templates.tsx        # Save/load campaign templates
+│   ├── TextAreaWithUpload.tsx # Reusable textarea with file upload
+│   └── ThemeToggle.tsx      # Dark mode toggle
+├── lib/
+│   ├── automationJobs.ts    # Local Puppeteer process manager
+│   ├── constants.ts         # Default message
+│   ├── phone.ts             # SL number validation + WhatsApp link builder
+│   └── useLocalStorage.ts   # Persistent state hook
+├── scripts/
+│   └── automate.mjs         # One-window WhatsApp Web automation
+├── package.json
+├── tsconfig.json
+├── tailwind.config.ts
+├── next.config.ts
+└── eslint.config.mjs
+```
+
+## Tech Stack
+
+- **Next.js 15** (App Router and local API routes)
+- **Puppeteer** (local browser automation)
+- **TypeScript**
+- **Tailwind CSS 3**
+- **lucide-react** (icons)
+- Runs on **localhost only**
 
 ## Important Notes
 
-- Don't use mouse/keyboard during sending
-- Max 20-30 messages per batch recommended
-- WhatsApp may flag excessive messaging
-- Recipients without your number saved will see messages in requests
-- Use responsibly and only with consent
-
-## Troubleshooting
-
-**Messages not sending:** Increase wait times in code (lines 49, 58, 64)  
-**Phone errors:** Verify valid Sri Lankan mobile numbers (9 digits)  
-**Script crashes:** Check Python 3.7+, reinstall dependencies
-
-## Example Files
-
-**numbers.txt:**
-
-```
-0771234567
-0772345678
-+94773456789
-```
-
-**message.txt:**
-
-```
-Hello! This is an automated reminder about our event on January 15, 2028.
-Please confirm your attendance.
-```
+- The first run opens WhatsApp Web for QR login
+- Maximum 50 recipients per Send All job
+- A five-second delay is applied between recipients
+- Recipients who haven't saved your number will see messages in their requests inbox
+- Use responsibly and only with recipient consent
 
 ## License
 
